@@ -9,7 +9,13 @@ public class Graph {
     private int[][] adjacencyMatrix;
     private int countVertex = 0;
     private ArrayList<Edge> edges;
-
+    
+    private ArrayList<String> resultDepartureArrival;
+    private ArrayList<String> resultPath;
+    private int totalDistance;
+    private int totalFuelCost;
+    
+    
     // Constructor
     public Graph(int maxVertex) {
         this.maxVertex = maxVertex;
@@ -114,11 +120,22 @@ public class Graph {
 
         // Build the path
         LinkedList<String> path = buildPath(predecessor, startIndex, destinationIndex);
+        
+        // Store the result
+        resultDepartureArrival = new ArrayList<>();
+        resultDepartureArrival.add(vertexList[startIndex].getLabel());
+        resultDepartureArrival.add(vertexList[destinationIndex].getLabel());
 
+        resultPath = new ArrayList<>();
+        resultPath.addAll(path);
+
+        totalDistance = distance[destinationIndex];
+        totalFuelCost = calculateTotalFuelCost(path);
+        
         // Print the result with total cost
         System.out.println("Rute terpendek dari " + startLabel + " ke " + destinationLabel + "\t: " + path);
-        System.out.println("Total Jarak\t\t\t: " + distance[destinationIndex]);
-        System.out.println("Total Fuel cost\t\t\t: " + calculateTotalFuelCost(path));
+        System.out.println("Total Jarak\t\t\t: " + totalDistance);
+        System.out.println("Total Fuel cost\t\t\t: " + totalFuelCost);   
     }
 
     private void initializeDijkstraArrays(int[] distance, boolean[] visited, int[] predecessor) {
@@ -148,7 +165,7 @@ public class Graph {
 
             for (Edge edge : edges) {
                 if ((edge.getVertexA() == start && edge.getVertexB() == end) ||
-                        (edge.getVertexA() == end && edge.getVertexB() == start)) {
+                    (edge.getVertexA() == end && edge.getVertexB() == start)) {
                     totalFuelCost += edge.getFuelCost();
                     break;
                 }
@@ -171,5 +188,25 @@ public class Graph {
 
         return minIndex;
     }
+    public ArrayList<Edge> getEdges() {
+        return edges;
+    }
+    public Vertex[] getVertexList() {
+        return vertexList;
+    }
+    public ArrayList<String> getResultDepartureArrival() {
+        return resultDepartureArrival;
+    }
 
+    public ArrayList<String> getResultPath() {
+        return resultPath;
+    }
+
+    public int getTotalDistance() {
+        return totalDistance;
+    }
+
+    public int getTotalFuelCost() {
+        return totalFuelCost;
+    }
 }

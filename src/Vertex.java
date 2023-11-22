@@ -1,5 +1,5 @@
 public class Vertex {
-    // Atribut
+    // Atribut 
     String label;
     private boolean flagvisited;
     // Constructor
