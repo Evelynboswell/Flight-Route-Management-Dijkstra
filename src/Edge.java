@@ -8,9 +8,7 @@ public class Edge {
         this.weight = weight;
         this.fuelCost = fuelCost;
     }
-    public Edge() {
-        // Constuctor kosong
-    }
+    public Edge() {}
     // Setter and getter
     public int getVertexA() {
         return vertexA;

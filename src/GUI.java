@@ -10,9 +10,12 @@ public class GUI extends JFrame {
 
     private DefaultTableModel tableModel;
     private JTable dataTable;
-    private JLabel kodeAsalLabel, kodeTujuanLabel, jarakLabel, fuelLabel;
-    private JTextField kodeAsalField, kodeTujuanField, jarakField, fuelCostField;
-    private JButton addButton, findRouteButton;
+    private JLabel kodeAsalLabel, kodeTujuanLabel;
+    private JTextField kodeAsalField, kodeTujuanField;
+    private JTextArea descriptionArea, namaBandara;
+    private JButton findRouteButton, clearButton;
+    private JLabel logoLabel;
+    private ImageIcon logo;
     private DefaultTableModel resultTableModel;
     private JTable resultTable;
     private Graph airportGraph;
@@ -20,7 +23,7 @@ public class GUI extends JFrame {
     public GUI() {
         // Set up frame
         setTitle("Airport Data and Route Finder");
-        setSize(1000, 700);
+        setSize(1480, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -28,12 +31,12 @@ public class GUI extends JFrame {
         // Container
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
-        contentPane.setBackground(Color.decode("#BBE6F7"));
+        contentPane.setBackground(Color.WHITE);
 
-        // Initialize the graph
-        airportGraph = new Graph(11);
+        // Inisialisasi graph
+        airportGraph = new Graph(15);
 
-        // Create components tabel Airport
+        // Tabel bandara
         tableModel = new DefaultTableModel();
         tableModel.addColumn("Bandara Asal");
         tableModel.addColumn("Bandara Tujuan");
@@ -43,57 +46,75 @@ public class GUI extends JFrame {
         dataTable = new JTable(tableModel);
         dataTable.setFont(new Font("Verdana", Font.PLAIN, 14));
         JScrollPane scrollPane = new JScrollPane(dataTable);
-        scrollPane.setBounds(20, 20, 950, 200);
+        scrollPane.setBounds(550, 20, 880, 200);
         JTableHeader tableHeader = dataTable.getTableHeader();
         tableHeader.setFont(new Font("Verdana", Font.BOLD, 14));
         tableHeader.setBackground(Color.decode("#0077F4"));
 
+        // Logo
+        logo = new ImageIcon("logo.png");
+        logo.setImage(logo.getImage().getScaledInstance(200, 150,
+                Image.SCALE_SMOOTH));
+        logoLabel = new JLabel(logo);
+        logoLabel.setBounds(30, 0, 200, 200);
+
         // Labels
         kodeAsalLabel = new JLabel("Kode Bandara Asal");
         kodeAsalLabel.setFont(new Font("Verdana", Font.BOLD, 16));
-        kodeAsalLabel.setBounds(20, 250, 200, 25);
+        kodeAsalLabel.setBounds(550, 250, 200, 25);
 
         kodeTujuanLabel = new JLabel("Kode Bandara Tujuan");
         kodeTujuanLabel.setFont(new Font("Verdana", Font.BOLD, 16));
-        kodeTujuanLabel.setBounds(20, 290, 200, 25);
-
-        jarakLabel = new JLabel("Jarak (Km)");
-        jarakLabel.setFont(new Font("Verdana", Font.BOLD, 16));
-        jarakLabel.setBounds(20, 330, 200, 25);
-
-        fuelLabel = new JLabel("Fuel cost (Rp)");
-        fuelLabel.setFont(new Font("Verdana", Font.BOLD, 16));
-        fuelLabel.setBounds(20, 370, 200, 25);
+        kodeTujuanLabel.setBounds(550, 290, 200, 25);
 
         // Text fields
         kodeAsalField = new JTextField(10);
-        kodeAsalField.setBounds(250, 250, 100, 30);
+        kodeAsalField.setBounds(800, 250, 100, 30);
         kodeAsalField.setFont(new Font("Verdana", Font.PLAIN, 16));
 
         kodeTujuanField = new JTextField(10);
-        kodeTujuanField.setBounds(250, 290, 100, 30);
+        kodeTujuanField.setBounds(800, 290, 100, 30);
         kodeTujuanField.setFont(new Font("Verdana", Font.PLAIN, 16));
 
-        jarakField = new JTextField(10);
-        jarakField.setBounds(250, 330, 100, 30);
-        jarakField.setFont(new Font("Verdana", Font.PLAIN, 16));
+        // Text Area
+        descriptionArea = new JTextArea("Notes:\n"
+                + "- Mencari Rute    : 1. Masukkan kode bandara asal\n"
+                + "\t      2. Masukkan kode bandara tujuan\n"
+                + "\t      3. Klik tombol 'Find Route'");
+        descriptionArea.setBounds(50, 410, 400, 170);
+        descriptionArea.setFont(new Font("Verdana", Font.PLAIN, 13));
+        descriptionArea.setBackground(Color.WHITE);
+        descriptionArea.setEditable(false);
 
-        fuelCostField = new JTextField(10);
-        fuelCostField.setBounds(250, 370, 100, 30);
-        fuelCostField.setFont(new Font("Verdana", Font.PLAIN, 16));
+        namaBandara = new JTextArea("Kode Bandara |  Nama Bandara\n"
+                + "YIA	   Yogyakarta International Airport\n"
+                + "KNO	   Kualanamu International Airport\n"
+                + "CGK 	   Soekarno-Hatta International Airport\n"
+                + "DPS	   Ngurah Rai International Airport\n"
+                + "UPG	   Sultan Hasanuddin International Airport\n"
+                + "SUB	   Juanda International Airport\n"
+                + "PKY	   Pekalongan Airport\n"
+                + "BDJ	   Bandar Udara Internasional Sultan Syarif Kasim II\n"
+                + "BTH	   Bathang Nai Bonar Airport\n"
+                + "PNK	   Sultan Aji Muhammad Sulaiman Sepinggan Airport\n"
+                + "MDC	   Supadio Airport");
+        namaBandara.setBounds(50, 180, 550, 210);
+        namaBandara.setFont(new Font("Verdana", Font.PLAIN, 13));
+        namaBandara.setBackground(Color.WHITE);
+        namaBandara.setEditable(false);
 
         // Buttons
-        addButton = new JButton("Add");
-        addButton.setBounds(450, 370, 100, 30);
-        addButton.setBackground(Color.decode("#0077F4"));
-        addButton.setForeground(Color.WHITE);
-        addButton.setFont(new Font("Verdana", Font.BOLD, 14));
-
         findRouteButton = new JButton("Find Route");
-        findRouteButton.setBounds(570, 370, 150, 30);
+        findRouteButton.setBounds(800, 350, 140, 30);
         findRouteButton.setBackground(Color.decode("#0077F4"));
         findRouteButton.setForeground(Color.WHITE);
         findRouteButton.setFont(new Font("Verdana", Font.BOLD, 14));
+
+        clearButton = new JButton("Clear");
+        clearButton.setBounds(950, 350, 100, 30);
+        clearButton.setBackground(Color.decode("#0077F4"));
+        clearButton.setForeground(Color.WHITE);
+        clearButton.setFont(new Font("Verdana", Font.BOLD, 14));
 
         // Tabel hasil
         resultTableModel = new DefaultTableModel();
@@ -107,7 +128,7 @@ public class GUI extends JFrame {
         resultTable.setFont(new Font("Verdana", Font.PLAIN, 14));
         resultTable.setFillsViewportHeight(true);
         JScrollPane resultScrollPane = new JScrollPane(resultTable);
-        resultScrollPane.setBounds(20, 420, 950, 200);
+        resultScrollPane.setBounds(550, 410, 880, 140);
 
         JTableHeader tableHeader2 = resultTable.getTableHeader();
         tableHeader2.setFont(new Font("Verdana", Font.BOLD, 14));
@@ -115,89 +136,90 @@ public class GUI extends JFrame {
 
         // Add komponen di container
         contentPane.add(scrollPane);
+        contentPane.add(logoLabel);
         contentPane.add(kodeAsalLabel);
         contentPane.add(kodeTujuanLabel);
-        contentPane.add(jarakLabel);
-        contentPane.add(fuelLabel);
         contentPane.add(kodeAsalField);
         contentPane.add(kodeTujuanField);
-        contentPane.add(jarakField);
-        contentPane.add(fuelCostField);
-        contentPane.add(addButton);
+        contentPane.add(descriptionArea);
+        contentPane.add(namaBandara);
         contentPane.add(findRouteButton);
+        contentPane.add(clearButton);
         contentPane.add(resultScrollPane);
 
-        // Set up button actions
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addData();
-            }
-        });
-
+        // Menambahkan actionListener pada buttons
         findRouteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 findRoute();
             }
         });
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Menghapus input
+                kodeAsalField.setText("");
+                kodeTujuanField.setText("");
 
+                // Menghapus isi tabel hasil
+                resultTableModel.setRowCount(0);
+            }
+        });
+        // Memanggil method ini untuk menginisialisasikan data yang tertulis
         initializeGraphWithData();
-
     }
-
-    private void addData() {
-        try {
-            String kodeAsal = kodeAsalField.getText();
-            String kodeTujuan = kodeTujuanField.getText();
-            int jarak = Integer.parseInt(jarakField.getText());
-            int fuelCost = Integer.parseInt(fuelCostField.getText());
-
-            airportGraph.addEdge(kodeAsal, kodeTujuan, jarak, fuelCost);
-
-            // Add data to the table
-            Object[] rowData = {kodeAsal, kodeTujuan, jarak, fuelCost};
-            tableModel.addRow(rowData);
-
-            // Clear input fields
-            kodeAsalField.setText("");
-            kodeTujuanField.setText("");
-            jarakField.setText("");
-            fuelCostField.setText("");
-
-            JOptionPane.showMessageDialog(this, "Data added successfully!");
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Invalid input. Please enter valid numbers for Jarak and Fuel Cost.");
-        }
-    }
-
+    // Method untuk mencari rute
     private void findRoute() {
         String kodeAsal = kodeAsalField.getText().toUpperCase().trim();
         String kodeTujuan = kodeTujuanField.getText().toUpperCase().trim();
 
         if (kodeAsal.isEmpty() || kodeTujuan.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter Kode Bandara Asal and Kode Bandara Tujuan.");
+            JOptionPane.showMessageDialog(this,
+                    "Masukkan Kode Bandara Asal and Kode Bandara Tujuan.");
             return;
         }
+        // Cek apakah vertex berada pada graf
+        int startIndex = airportGraph.indexVertex(kodeAsal);
+        int destinationIndex = airportGraph.indexVertex(kodeTujuan);
 
+        if (startIndex == -1 || destinationIndex == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Satu atau dua bandara tidak terdaftar.");
+            return;
+        }
+        // Memanggil method ini untuk mencari rute dgn Dijkstra
         airportGraph.dijkstraShortestPath(kodeAsal, kodeTujuan);
 
-        // Display results in the result table
-        ArrayList<String> resultDepartureArrival = airportGraph.getResultDepartureArrival();
+        // Menampilkan hasil di tabel result
+        ArrayList<String> resultDepartureArrival =
+                airportGraph.getResultDepartureArrival();
         ArrayList<String> resultPath = airportGraph.getResultPath();
-        int totalDistance = airportGraph.getTotalDistance();
-        int totalFuelCost = airportGraph.getTotalFuelCost();
+        // Cek apakah resultPath kosong
+        if (resultPath != null) {
+            int totalDistance = airportGraph.getTotalDistance();
+            int totalFuelCost = airportGraph.getTotalFuelCost();
 
-        // Check if the result is not empty
-        if (!resultPath.isEmpty()) {
-            Object[] rowData = {resultDepartureArrival.get(0), resultDepartureArrival.get(1),
-                    resultPath.toString(), totalDistance, totalFuelCost};
-            resultTableModel.addRow(rowData);
+            // Cek apakah resultPath kosong
+            if (!resultPath.isEmpty()) {
+                Object[] rowData = {
+                        resultDepartureArrival.get(0),
+                        resultDepartureArrival.get(1),
+                        resultPath.toString(),
+                        totalDistance,
+                        totalFuelCost
+                };
+                resultTableModel.addRow(rowData);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No route found between the specified airports.");
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "No route found between the specified airports.");
+            // Menampilkan pesan jika terdapat error menemukan rute
+            JOptionPane.showMessageDialog(this,
+                    "Error finding route. Please check your input.");
         }
     }
-
+    // Method untuk memasukkan data yang telah ada sebelumnya
     private void initializeGraphWithData() {
         //Daftar semua airport
         airportGraph.addVertex("YIA");
@@ -241,16 +263,13 @@ public class GUI extends JFrame {
         airportGraph.addEdge("UPG", "MDC", 946, 35475000);
         updateTableWithGraphData();
     }
-
+    // Method untuk mengupdate data pada tabel
     private void updateTableWithGraphData() {
-        // Clear the existing data in the table
-        tableModel.setRowCount(0);
-
-        // Get the vertices and edges from the graph
+        // Mengambil vertex dan edges dari graf
         Vertex[] vertices = airportGraph.getVertexList();
         ArrayList<Edge> edges = airportGraph.getEdges();
 
-        // Iterate through the edges in the graph and add them to the table
+        // Iterasi semua edge pada graf dan tambahkan ke dalam tabel
         for (Edge edge : edges) {
             Object[] rowData = {vertices[edge.getVertexA()].getLabel(),
                     vertices[edge.getVertexB()].getLabel(),
@@ -259,7 +278,7 @@ public class GUI extends JFrame {
             tableModel.addRow(rowData);
         }
     }
-
+    // Main
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override

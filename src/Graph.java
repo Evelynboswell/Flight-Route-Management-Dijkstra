@@ -9,13 +9,11 @@ public class Graph {
     private int[][] adjacencyMatrix;
     private int countVertex = 0;
     private ArrayList<Edge> edges;
-    
     private ArrayList<String> resultDepartureArrival;
     private ArrayList<String> resultPath;
     private int totalDistance;
     private int totalFuelCost;
-    
-    
+
     // Constructor
     public Graph(int maxVertex) {
         this.maxVertex = maxVertex;
@@ -28,7 +26,7 @@ public class Graph {
             }
         }
     }
-    // Method untuk menambahkan vertex/simpul
+    // Method untuk menambahkan vertex
     public void addVertex(String label) {
         if (countVertex < maxVertex) {
             vertexList[countVertex] = new Vertex(label);
@@ -54,9 +52,8 @@ public class Graph {
             edges.add(edge);
         }
     }
-
     // Method untuk mencari index dari vertex
-    private int indexVertex(String label) {
+    int indexVertex(String label) {
         for (int i = 0; i < countVertex; i++) {
             if (vertexList[i].getLabel().equals(label)) {
                 return i;
@@ -64,28 +61,9 @@ public class Graph {
         }
         return -1;
     }
-    // Method untuk menampilkan Adjacency Matrix
-    @Override
-    public String toString() {
-        System.out.println("");
-        System.out.println("Matrix Adjacency");
-        System.out.println("---------------------------------");
-        System.out.print("    ");
-        for(int i = 0; i < countVertex; i++) {
-            System.out.printf(" %-2S", (vertexList[i].getLabel()));
-        }
-        System.out.println("");
-        for(int i = 0; i < countVertex; i++) {
-            System.out.printf(" %-4S", (vertexList[i].getLabel())+" ");
-            for(int j = 0; j < countVertex; ++j) {
-                System.out.printf("%-3S", adjacencyMatrix[i][j]);
-            }
-            System.out.println("");
-        }
-        return "";
-    }
-    // Method for Dijkstra's Algorithm
+    // Method untuk Algoritma Dijkstra
     public void dijkstraShortestPath(String startLabel, String destinationLabel) {
+        // Mencari index dari vertex asal dan vertex tujuan
         int startIndex = indexVertex(startLabel);
         int destinationIndex = indexVertex(destinationLabel);
 
@@ -93,17 +71,17 @@ public class Graph {
             System.out.println("Vertex Tidak Ditemukan: " + (startIndex == -1 ? startLabel : destinationLabel));
             return;
         }
-
+        // Kumpulan array untuk menyimpan beberapa informasi
         int[] distance = new int[countVertex];
         boolean[] visited = new boolean[countVertex];
         int[] predecessor = new int[countVertex];
 
-        // Initialize distances with infinity and mark all vertices as unvisited
+        //Inisialisasi jarak dengan tak terhingga dan tandai semua simpul sebagai 'tidak dikunjungi'
         initializeDijkstraArrays(distance, visited, predecessor);
 
-        // Distance from the start vertex to itself is 0
+        // Jarak dari vertex awal ke dirinya sendiri adalah 0
         distance[startIndex] = 0;
-
+        // Nested for loop untuk mencari jarak minimum antar vertex
         for (int i = 0; i < countVertex - 1; i++) {
             int currentVertex = findMinDistanceVertex(distance, visited);
             visited[currentVertex] = true;
@@ -118,10 +96,10 @@ public class Graph {
             }
         }
 
-        // Build the path
+        // Bikin path
         LinkedList<String> path = buildPath(predecessor, startIndex, destinationIndex);
-        
-        // Store the result
+
+        // Simpan hasil
         resultDepartureArrival = new ArrayList<>();
         resultDepartureArrival.add(vertexList[startIndex].getLabel());
         resultDepartureArrival.add(vertexList[destinationIndex].getLabel());
@@ -131,11 +109,11 @@ public class Graph {
 
         totalDistance = distance[destinationIndex];
         totalFuelCost = calculateTotalFuelCost(path);
-        
-        // Print the result with total cost
+
+        // Cetak total jarak dan cost
         System.out.println("Rute terpendek dari " + startLabel + " ke " + destinationLabel + "\t: " + path);
         System.out.println("Total Jarak\t\t\t: " + totalDistance);
-        System.out.println("Total Fuel cost\t\t\t: " + totalFuelCost);   
+        System.out.println("Total Fuel cost\t\t\t: " + totalFuelCost);
     }
 
     private void initializeDijkstraArrays(int[] distance, boolean[] visited, int[] predecessor) {
@@ -155,7 +133,7 @@ public class Graph {
         path.addFirst(vertexList[startIndex].getLabel());
         return path;
     }
-
+    // Method untuk menghitung total fuel cost
     private int calculateTotalFuelCost(LinkedList<String> path) {
         int totalFuelCost = 0;
 
@@ -165,16 +143,15 @@ public class Graph {
 
             for (Edge edge : edges) {
                 if ((edge.getVertexA() == start && edge.getVertexB() == end) ||
-                    (edge.getVertexA() == end && edge.getVertexB() == start)) {
+                        (edge.getVertexA() == end && edge.getVertexB() == start)) {
                     totalFuelCost += edge.getFuelCost();
                     break;
                 }
             }
         }
-
         return totalFuelCost;
     }
-
+    // Method untuk mencari jarak minimal vertex
     private int findMinDistanceVertex(int[] distance, boolean[] visited) {
         int minDistance = Integer.MAX_VALUE;
         int minIndex = -1;
@@ -188,6 +165,7 @@ public class Graph {
 
         return minIndex;
     }
+    // Getter
     public ArrayList<Edge> getEdges() {
         return edges;
     }
@@ -197,15 +175,12 @@ public class Graph {
     public ArrayList<String> getResultDepartureArrival() {
         return resultDepartureArrival;
     }
-
     public ArrayList<String> getResultPath() {
         return resultPath;
     }
-
     public int getTotalDistance() {
         return totalDistance;
     }
-
     public int getTotalFuelCost() {
         return totalFuelCost;
     }
