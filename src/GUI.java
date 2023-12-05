@@ -79,8 +79,8 @@ public class GUI extends JFrame {
         // Text Area
         descriptionArea = new JTextArea("Notes:\n"
                 + "- Mencari Rute    : 1. Masukkan kode bandara asal\n"
-                + "\t      2. Masukkan kode bandara tujuan\n"
-                + "\t      3. Klik tombol 'Find Route'");
+                + "\t        2. Masukkan kode bandara tujuan\n"
+                + "\t        3. Klik tombol 'Find Route'");
         descriptionArea.setBounds(50, 410, 400, 170);
         descriptionArea.setFont(new Font("Verdana", Font.PLAIN, 13));
         descriptionArea.setBackground(Color.WHITE);
